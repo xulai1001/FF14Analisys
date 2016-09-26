@@ -54,12 +54,13 @@
             </div>
 
             <div class="col-md-2">
-                <input class="form-control" id="itemNameText" type="text" placeholder="请输入精确的道具名称"/>
+                <input class="form-control" id="itemNameText" type="text" placeholder="道具全名或ID(3.x物品请使用ID)"/>
             </div>
 
             <div class="col-md-1">
                 <button id="searchBtn" type="button" class="btn btn-success">给我搜</button>
             </div>
+            <div id="debug" />
 
             <img id="itemIcon" style="width:34px; height:34px" src="" hidden>
             <!--<img id="itemIconHQ" style="width:34px; height:34px" src="" hidden>-->
@@ -282,7 +283,6 @@
             async: true,
             success: function (obj) {
                 var data = obj.uiData;
-
                 dateArr = data.dates;
                 itemBottomPriceArr = data.itemBottomPrices;
                 itemAveragePrizeArr = data.itemAveragePrizes;
@@ -295,7 +295,7 @@
                     $("#itemIcon").attr('src', data.iconUrl);
                 }
                 else {
-                    $("#itemIcon").hide();
+                    $("#itemNameText").val(data.name);
                 }
 
 //                if (data.hqIconUrl) {
@@ -305,7 +305,7 @@
 //                else {
 //                    $("#itemIconHQ").hide();
 //                }
-            }
+            },
         });
     })
 

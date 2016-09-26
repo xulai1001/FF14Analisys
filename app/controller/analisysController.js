@@ -14,18 +14,22 @@ exports.searchItemTrade = function(req, res) {
     var uikindkey = req.query.uikindkey;
 
     findItemInfo.exec(keyword, uikindkey, function(itemObj) {
-        if (itemObj == null) {
-            res.send({error : "没找到"});
+        if (itemObj == null && isNaN(keyword)) {
+            res.send({error : "没找到", id : keyword});
         }
         else {
-            getItemTradeData.exec(itemObj.id, areaId, groupId, function(tradeData) {
+            var id = keyword;
+            if (itemObj) id = itemObj.id;
+            getItemTradeData.exec(id, areaId, groupId, function(tradeData) {
                 if (tradeData == null) {
-                    res.send({error : "没找到"});
+                    res.send({error : "没找到", id : id});
                 }
                 else {
                     parseSDdataToUIData.exec(tradeData, function(uiData) {
-                        uiData.iconUrl = itemObj.iconUrl;
-                        uiData.hqIconUrl = itemObj.hqIconUrl;
+                        if (itemObj) {
+                            uiData.iconUrl = itemObj.iconUrl;
+                            uiData.hqIconUrl = itemObj.hqIconUrl;
+                        }
                         res.send({uiData : uiData});
                     })
                 }
